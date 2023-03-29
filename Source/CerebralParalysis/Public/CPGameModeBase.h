@@ -14,6 +14,7 @@ class CEREBRALPARALYSIS_API ACPGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	virtual void BeginPlay() override;
+public:
+	ACPGameModeBase();
 
 };

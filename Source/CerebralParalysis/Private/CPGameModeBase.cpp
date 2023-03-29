@@ -3,12 +3,11 @@
 
 #include "CPGameModeBase.h"
 
-void ACPGameModeBase::BeginPlay()
-{
-	Super::BeginPlay();
+#include "Player/CPBaseCharacter.h"
+#include "Player/CPPlayerController.h"
 
-	if (true)
-	{
-		UE_LOG(LogTemp, Display, TEXT("Hii"));
-	}
+ACPGameModeBase::ACPGameModeBase()
+{
+	DefaultPawnClass = ACPBaseCharacter::StaticClass();
+	PlayerControllerClass = ACPPlayerController::StaticClass();
 }
