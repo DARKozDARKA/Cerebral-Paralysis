@@ -6,9 +6,6 @@
 #include "GameFramework/GameModeBase.h"
 #include "CPGameModeBase.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class CEREBRALPARALYSIS_API ACPGameModeBase : public AGameModeBase
 {

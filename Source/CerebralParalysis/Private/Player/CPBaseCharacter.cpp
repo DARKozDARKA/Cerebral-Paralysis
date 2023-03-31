@@ -3,6 +3,8 @@
 
 #include "Player/CPBaseCharacter.h"
 
+#include "Components/Public/CPHealth.h"
+
 // Sets default values
 ACPBaseCharacter::ACPBaseCharacter()
 {
@@ -14,14 +16,25 @@ ACPBaseCharacter::ACPBaseCharacter()
 	
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+
+	HealthComponent = CreateDefaultSubobject<UCPHealth>("HealthComponent");
+
+	HealthTextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("TextRenderComponent");
+	HealthTextRenderComponent->SetupAttachment(GetRootComponent());
 }
 
 
-// Called when the game starts or when spawned
+void ACPBaseCharacter::FunctionIg()
+{
+}
 
 void ACPBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	check(HealthComponent);
+
+	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::FunctionIg);
 	
 }
 
@@ -31,6 +44,12 @@ void ACPBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AddMovementInput(MoveVector, SpeedAmount);
+
+	float Health = HealthComponent->GetHealth();
+	HealthTextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+	//UE_LOG(LogTemp, Display, TEXT("%.0f"), Health);
+
+	HealthComponent->TakeDamage(0.1f);
 }
 
 float ACPBaseCharacter::GetMovementDirection() const
