@@ -21,16 +21,22 @@ void UCPHealth::BeginPlay()
 
 void UCPHealth::TakeDamage(float Amount)
 {
+	if (IsDead)
+		return;
+	
 	Health -= Amount;
 
 	if (Health <= 0)
 		Die();
+
+	HealthChangedDelegate.Execute();
 }
 
 void UCPHealth::Die()
 {
-	UE_LOG(LogTemp, Display, TEXT("Bro just died"));
-	HealthChangedDelegate.Execute();
+	Health = 0;
+	OnDeath.Broadcast();
+	IsDead = true;
 }
 
 

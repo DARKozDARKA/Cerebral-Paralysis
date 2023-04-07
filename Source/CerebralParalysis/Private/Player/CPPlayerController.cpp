@@ -28,6 +28,8 @@ void ACPPlayerController::Tick(float DeltaSeconds)
 	Character3 = Cast<ACPBaseCharacter>(Character2);
 
 	Character3->SetLookRotation(FHit.Location);
+
+	
 	
 	
 }

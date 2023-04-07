@@ -4,6 +4,7 @@
 #include "Player/CPBaseCharacter.h"
 
 #include "Components/Public/CPHealth.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ACPBaseCharacter::ACPBaseCharacter()
@@ -24,18 +25,22 @@ ACPBaseCharacter::ACPBaseCharacter()
 }
 
 
-void ACPBaseCharacter::FunctionIg()
-{
-}
-
 void ACPBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	check(HealthComponent);
 
-	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::FunctionIg);
+	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::SetHealth);
+	HealthComponent->OnDeath.AddUObject(this, &ACPBaseCharacter::OnDeath);
+	SetHealth();
 	
+}
+
+void ACPBaseCharacter::SetHealth()
+{
+	float Health = HealthComponent->GetHealth();
+	HealthTextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 // Called every frame
@@ -44,12 +49,6 @@ void ACPBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AddMovementInput(MoveVector, SpeedAmount);
-
-	float Health = HealthComponent->GetHealth();
-	HealthTextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-	//UE_LOG(LogTemp, Display, TEXT("%.0f"), Health);
-
-	HealthComponent->TakeDamage(0.1f);
 }
 
 float ACPBaseCharacter::GetMovementDirection() const
@@ -62,10 +61,17 @@ float ACPBaseCharacter::GetMovementDirection() const
 
 void ACPBaseCharacter::SetLookRotation(FVector_NetQuantize Vector)
 {
+	if (IsDead)
+	{
+		RootComponent->SetWorldRotation(LatestRotation);
+		return;
+	}
+	
 	Vector.Z = GetActorLocation().Z;
 	FVector FinalVector = Vector - GetActorLocation();
-	FRotator newrot = FinalVector.Rotation();
-	RootComponent->SetWorldRotation(newrot);
+	FRotator NewRotation = FinalVector.Rotation();
+	LatestRotation = NewRotation;
+	RootComponent->SetWorldRotation(NewRotation);
 }
 
 // Called to bind functionality to input
@@ -93,4 +99,19 @@ void ACPBaseCharacter::MoveHorizontal(float Amount)
 void ACPBaseCharacter::MoveVertical(float Amount)
 {
 	MoveVector.X = Amount;
+}
+
+void ACPBaseCharacter::OnDeath()
+{
+	IsDead = true;
+	PlayAnimMontage(DeathAnimationMontage);
+
+	GetCharacterMovement()->DisableMovement();
+	SetLifeSpan(5.0);
+
+	if (Controller)
+	{
+		Controller->ChangeState(NAME_Spectating);
+	}
+
 }

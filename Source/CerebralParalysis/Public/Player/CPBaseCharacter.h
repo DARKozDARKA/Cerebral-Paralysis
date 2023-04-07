@@ -33,6 +33,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextRenderComponent;
+	
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animations");
+	UAnimMontage* DeathAnimationMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float SpeedAmount = 300;
@@ -44,7 +49,7 @@ protected:
 	FVector MoveVector;
 
 	UFUNCTION()
-	void FunctionIg();
+	void SetHealth();
 	
 	virtual void BeginPlay() override;
 
@@ -57,4 +62,9 @@ public:
 private:
 	void MoveHorizontal(float Amount);
 	void MoveVertical(float Amount);
+	void OnDeath();
+
+	bool IsDead;
+	FRotator LatestRotation;
 };
+

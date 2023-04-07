@@ -6,15 +6,17 @@
 #include "Components/ActorComponent.h"
 #include "CPHealth.generated.h"
 
-DECLARE_DELEGATE(FOnHealthChanged);
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CEREBRALPARALYSIS_API UCPHealth : public UActorComponent
 {
+	DECLARE_DELEGATE(FOnHealthChanged);
+	DECLARE_MULTICAST_DELEGATE(FOnDeath);
+	
 	GENERATED_BODY()
-
 public:
 	FOnHealthChanged HealthChangedDelegate;
+	
+	FOnDeath OnDeath;
 	
 	UCPHealth();
 
@@ -35,6 +37,7 @@ protected:
 
 private:
 	void Die();
+	bool IsDead = false;
 	
 };
 
