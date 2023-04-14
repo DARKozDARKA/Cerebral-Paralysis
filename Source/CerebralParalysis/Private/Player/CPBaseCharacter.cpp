@@ -9,14 +9,14 @@
 // Sets default values
 ACPBaseCharacter::ACPBaseCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
-    SpringArmComponent->SetupAttachment(GetRootComponent());
-	
-    CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-    CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComponent->SetupAttachment(GetRootComponent());
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	HealthComponent = CreateDefaultSubobject<UCPHealth>("HealthComponent");
 
@@ -34,7 +34,7 @@ void ACPBaseCharacter::BeginPlay()
 	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::SetHealth);
 	HealthComponent->OnDeath.AddUObject(this, &ACPBaseCharacter::OnDeath);
 	SetHealth();
-	
+	SpawnWeapon();
 }
 
 void ACPBaseCharacter::SetHealth()
@@ -56,7 +56,7 @@ float ACPBaseCharacter::GetMovementDirection() const
 	const auto VelocityNormal = GetVelocity().GetSafeNormal();
 	const double AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
 	const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
-	return FMath::RadiansToDegrees(AngleBetween)  * FMath::Sign(CrossProduct.Z);
+	return FMath::RadiansToDegrees(AngleBetween) * FMath::Sign(CrossProduct.Z);
 }
 
 void ACPBaseCharacter::SetLookRotation(FVector_NetQuantize Vector)
@@ -66,7 +66,7 @@ void ACPBaseCharacter::SetLookRotation(FVector_NetQuantize Vector)
 		RootComponent->SetWorldRotation(LatestRotation);
 		return;
 	}
-	
+
 	Vector.Z = GetActorLocation().Z;
 	FVector FinalVector = Vector - GetActorLocation();
 	FRotator NewRotation = FinalVector.Rotation();
@@ -83,7 +83,6 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Horizontal", this, &ACPBaseCharacter::MoveHorizontal);
 	PlayerInputComponent->BindAxis("Vertical", this, &ACPBaseCharacter::MoveVertical);
 	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &ACPBaseCharacter::Roll);
-
 }
 
 void ACPBaseCharacter::Roll()
@@ -113,5 +112,20 @@ void ACPBaseCharacter::OnDeath()
 	{
 		Controller->ChangeState(NAME_Spectating);
 	}
+}
 
+void ACPBaseCharacter::SpawnWeapon()
+{
+	if (!GetWorld())
+		return;
+
+	ACPBaseWeapon* CurrentWeapon = GetWorld()->SpawnActor<ACPBaseWeapon>(Weapon);
+
+	if (!CurrentWeapon)
+		return;
+
+	const FAttachmentTransformRules* AttachmentRules = new FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+	CurrentWeapon->AttachToComponent(GetMesh(), *AttachmentRules, "WeaponSocket");
+
+	
 }

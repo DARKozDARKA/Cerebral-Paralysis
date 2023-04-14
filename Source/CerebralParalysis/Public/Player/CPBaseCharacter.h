@@ -8,6 +8,7 @@
 #include "Components/Public/CPHealth.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon/CPBaseWeapon.h"
 #include "CPBaseCharacter.generated.h"
 
 class USpringArmComponent;
@@ -34,7 +35,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextRenderComponent;
 	
-
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	TSubclassOf<ACPBaseWeapon> Weapon;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animations");
 	UAnimMontage* DeathAnimationMontage;
@@ -63,6 +65,7 @@ private:
 	void MoveHorizontal(float Amount);
 	void MoveVertical(float Amount);
 	void OnDeath();
+	void SpawnWeapon();
 
 	bool IsDead;
 	FRotator LatestRotation;
