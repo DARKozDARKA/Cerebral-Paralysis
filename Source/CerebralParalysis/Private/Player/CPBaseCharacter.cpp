@@ -19,6 +19,7 @@ ACPBaseCharacter::ACPBaseCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	HealthComponent = CreateDefaultSubobject<UCPHealth>("HealthComponent");
+	WeaponComponent = CreateDefaultSubobject<UCPWeaponComponent>("WeaponComponent");
 
 	HealthTextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("TextRenderComponent");
 	HealthTextRenderComponent->SetupAttachment(GetRootComponent());
@@ -34,7 +35,6 @@ void ACPBaseCharacter::BeginPlay()
 	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::SetHealth);
 	HealthComponent->OnDeath.AddUObject(this, &ACPBaseCharacter::OnDeath);
 	SetHealth();
-	SpawnWeapon();
 }
 
 void ACPBaseCharacter::SetHealth()
@@ -78,11 +78,14 @@ void ACPBaseCharacter::SetLookRotation(FVector_NetQuantize Vector)
 
 void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	check(WeaponComponent);
+	
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("Horizontal", this, &ACPBaseCharacter::MoveHorizontal);
 	PlayerInputComponent->BindAxis("Vertical", this, &ACPBaseCharacter::MoveVertical);
 	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &ACPBaseCharacter::Roll);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UCPWeaponComponent::Fire);
 }
 
 void ACPBaseCharacter::Roll()
@@ -114,18 +117,4 @@ void ACPBaseCharacter::OnDeath()
 	}
 }
 
-void ACPBaseCharacter::SpawnWeapon()
-{
-	if (!GetWorld())
-		return;
 
-	ACPBaseWeapon* CurrentWeapon = GetWorld()->SpawnActor<ACPBaseWeapon>(Weapon);
-
-	if (!CurrentWeapon)
-		return;
-
-	const FAttachmentTransformRules* AttachmentRules = new FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
-	CurrentWeapon->AttachToComponent(GetMesh(), *AttachmentRules, "WeaponSocket");
-
-	
-}

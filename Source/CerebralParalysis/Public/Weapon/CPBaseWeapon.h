@@ -13,12 +13,26 @@ class CEREBRALPARALYSIS_API ACPBaseWeapon : public AActor
 	
 public:	
 	ACPBaseWeapon();
+	virtual void Fire();
+	void CalculateTrace(FVector& TraceStart, FVector& TraceEnd);
+	void Raycast(FVector TraceStart, FVector TraceEnd, FHitResult& HitResult);
+	void Damage(FHitResult HitResult);
 
 protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMeshComponent;
 
-public:	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FName MuzzleSocketName = "MuzzleFlashSocket";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float TraceMaxDistance = 1500;
+
+	UPROPERTY(EditDefaultsOnly)
+	float DamageAmount;
+
+private:
+	void MakeShot();
 
 };

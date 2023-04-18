@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CPWeaponComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/Public/CPHealth.h"
 #include "GameFramework/Character.h"
@@ -34,9 +35,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextRenderComponent;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
-	TSubclassOf<ACPBaseWeapon> Weapon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UCPWeaponComponent* WeaponComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animations");
 	UAnimMontage* DeathAnimationMontage;
@@ -65,7 +66,6 @@ private:
 	void MoveHorizontal(float Amount);
 	void MoveVertical(float Amount);
 	void OnDeath();
-	void SpawnWeapon();
 
 	bool IsDead;
 	FRotator LatestRotation;
