@@ -85,7 +85,8 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Horizontal", this, &ACPBaseCharacter::MoveHorizontal);
 	PlayerInputComponent->BindAxis("Vertical", this, &ACPBaseCharacter::MoveVertical);
 	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &ACPBaseCharacter::Roll);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UCPWeaponComponent::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UCPWeaponComponent::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UCPWeaponComponent::StopFire);
 }
 
 void ACPBaseCharacter::Roll()

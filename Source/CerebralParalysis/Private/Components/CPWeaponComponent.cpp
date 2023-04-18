@@ -44,10 +44,18 @@ void UCPWeaponComponent::SpawnWeapon()
 	CurrentWeapon->AttachToComponent(Character->GetMesh(), *AttachmentRules, SocketName);
 }
 
-void UCPWeaponComponent::Fire()
+void UCPWeaponComponent::StartFire()
 {
 	if (!CurrentWeapon)
 		return;
 
-	CurrentWeapon->Fire();
+	CurrentWeapon->StartFire();
+}
+
+void UCPWeaponComponent::StopFire()
+{
+	if (!CurrentWeapon)
+		return;
+
+	CurrentWeapon->StopFire();
 }

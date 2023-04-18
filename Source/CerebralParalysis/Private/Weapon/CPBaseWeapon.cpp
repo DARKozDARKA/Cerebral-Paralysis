@@ -9,7 +9,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
 ACPBaseWeapon::ACPBaseWeapon()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	WeaponMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>("Skeletal Mesh");
 	SetRootComponent(WeaponMeshComponent);
 }
@@ -20,10 +20,25 @@ void ACPBaseWeapon::BeginPlay()
 	check(WeaponMeshComponent);
 }
 
-void ACPBaseWeapon::Fire()
+void ACPBaseWeapon::Tick(float DeltaSeconds)
 {
-	MakeShot();
+	Super::Tick(DeltaSeconds);
+
+	if (IsFiring && CanFire)
+		MakeShot();
 }
+
+void ACPBaseWeapon::StartFire()
+{
+	IsFiring = true;
+}
+
+void ACPBaseWeapon::StopFire()
+{
+	IsFiring = false;
+}
+
+
 
 void ACPBaseWeapon::MakeShot()
 {
@@ -41,7 +56,12 @@ void ACPBaseWeapon::MakeShot()
 
 	if (HitResult.bBlockingHit)
 		Damage(HitResult);
+
+	CanFire = false;
+	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ACPBaseWeapon::ReloadFire, FireReloadTime, false, FireReloadTime);
 }
+
+
 
 void ACPBaseWeapon::CalculateTrace(FVector& TraceStart, FVector& TraceEnd)
 {
@@ -66,4 +86,9 @@ void ACPBaseWeapon::Damage(FHitResult HitResult)
 	Health->TakeDamage(DamageAmount);
 	
 	DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
+}
+
+void ACPBaseWeapon::ReloadFire()
+{
+	CanFire = true;
 }

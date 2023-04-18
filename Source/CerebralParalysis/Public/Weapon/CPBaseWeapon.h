@@ -13,7 +13,10 @@ class CEREBRALPARALYSIS_API ACPBaseWeapon : public AActor
 	
 public:	
 	ACPBaseWeapon();
-	virtual void Fire();
+
+	
+	virtual void StartFire();
+	virtual void StopFire();
 	void CalculateTrace(FVector& TraceStart, FVector& TraceEnd);
 	void Raycast(FVector TraceStart, FVector TraceEnd, FHitResult& HitResult);
 	void Damage(FHitResult HitResult);
@@ -32,7 +35,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	float DamageAmount;
 
+	UPROPERTY(EditDefaultsOnly)
+	float FireReloadTime;
+	
+	FTimerHandle FireTimerHandle;
+
 private:
+	void ReloadFire();
 	void MakeShot();
 
+	bool IsFiring;
+	bool CanFire = true;
+
+
+	virtual void Tick(float DeltaSeconds) override;
 };

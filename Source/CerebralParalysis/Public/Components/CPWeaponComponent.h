@@ -15,7 +15,8 @@ class CEREBRALPARALYSIS_API UCPWeaponComponent : public UActorComponent
 
 public:	
 	UCPWeaponComponent();
-	void Fire();
+	void StartFire();
+	void StopFire();
 	
 
 protected:
