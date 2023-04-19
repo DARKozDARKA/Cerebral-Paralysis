@@ -44,9 +44,18 @@ void ACPProjectile::TakeDamage(AActor* OtherActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("HIT"));
 	
-	UActorComponent* HealthActor = OtherActor->GetComponentByClass(UCPHealth::StaticClass());
-	if (HealthActor == nullptr)
+	//UActorComponent* HealthActor = OtherActor->GetComponentByClass(UCPHealth::StaticClass());
+	//if (HealthActor == nullptr)
+	//	return;
+	//Cast<UCPHealth>(HealthActor)->TakeDamage(DamageAmount);
+
+	ACPExplosion* Explosion = GetWorld()->SpawnActorDeferred<ACPExplosion>(ExplosionClass, GetActorTransform());
+
+	if (!Explosion)
 		return;
-	Cast<UCPHealth>(HealthActor)->TakeDamage(DamageAmount);
+	
+	Explosion->SetDamage(DamageAmount);
+	Explosion->SetOwner(GetOwner());
+	Explosion->FinishSpawning(GetActorTransform());
 
 }
