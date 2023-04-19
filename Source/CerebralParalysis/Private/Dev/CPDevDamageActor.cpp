@@ -28,11 +28,7 @@ void ACPDevDamageActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	TArray<AActor*> Actors;
-	TSubclassOf<AActor> subClass = UCPHealth::StaticClass();
-	GetOverlappingActors(Actors, subClass);
-
-	TArray<UPrimitiveComponent*> Components;
-	GetOverlappingComponents(Components);
+	GetOverlappingActors(Actors, UCPHealth::StaticClass());
 
 	for (AActor* Actor : Actors)
 	{

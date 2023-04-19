@@ -7,7 +7,6 @@
 #include "Weapon/CPBaseWeapon.h"
 #include "CPWeaponComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CEREBRALPARALYSIS_API UCPWeaponComponent : public UActorComponent
 {
@@ -17,7 +16,6 @@ public:
 	UCPWeaponComponent();
 	void StartFire();
 	void StopFire();
-	
 
 protected:
 	virtual void BeginPlay() override;
