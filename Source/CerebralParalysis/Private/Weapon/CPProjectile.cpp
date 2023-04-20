@@ -42,13 +42,6 @@ void ACPProjectile::OnProjectHit(UPrimitiveComponent* HitComponent, AActor* Othe
 
 void ACPProjectile::TakeDamage(AActor* OtherActor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("HIT"));
-	
-	//UActorComponent* HealthActor = OtherActor->GetComponentByClass(UCPHealth::StaticClass());
-	//if (HealthActor == nullptr)
-	//	return;
-	//Cast<UCPHealth>(HealthActor)->TakeDamage(DamageAmount);
-
 	ACPExplosion* Explosion = GetWorld()->SpawnActorDeferred<ACPExplosion>(ExplosionClass, GetActorTransform());
 
 	if (!Explosion)

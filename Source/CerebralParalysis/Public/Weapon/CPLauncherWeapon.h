@@ -35,4 +35,6 @@ private:
 	void CalculateTrace(FVector& TraceStart, FVector& TraceEnd);
 	void Raycast(FVector TraceStart, FVector TraceEnd, FHitResult& HitResult);
 	void Damage(FHitResult HitResult);
+	void GetFireDirection(FVector& Direction);
+
 };
