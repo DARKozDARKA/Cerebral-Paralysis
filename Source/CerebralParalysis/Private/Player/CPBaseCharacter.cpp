@@ -29,9 +29,7 @@ ACPBaseCharacter::ACPBaseCharacter()
 void ACPBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	check(HealthComponent);
-
+	
 	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::SetHealth);
 	HealthComponent->OnDeath.AddUObject(this, &ACPBaseCharacter::OnDeath);
 	SetHealth();

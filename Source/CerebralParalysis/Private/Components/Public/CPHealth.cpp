@@ -14,6 +14,8 @@ void UCPHealth::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(MaxHealth > 0);
+	
 	Health = MaxHealth;
 	UE_LOG(LogTemp, Error, TEXT("Begin"));
 	

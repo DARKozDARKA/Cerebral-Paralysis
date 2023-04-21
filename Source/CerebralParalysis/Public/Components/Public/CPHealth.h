@@ -11,13 +11,13 @@ class CEREBRALPARALYSIS_API UCPHealth : public UActorComponent
 {
 	DECLARE_DELEGATE(FOnHealthChanged);
 	DECLARE_MULTICAST_DELEGATE(FOnDeath);
-	
+
 	GENERATED_BODY()
 public:
 	FOnHealthChanged HealthChangedDelegate;
-	
+
 	FOnDeath OnDeath;
-	
+
 	UCPHealth();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0"))
@@ -27,9 +27,14 @@ public:
 	float GetHealth() const { return Health; }
 
 	UFUNCTION(BlueprintCallable)
+	bool IsPlayerDead() const { return Health <= 0; }
+
+	UFUNCTION(BlueprintCallable)
 	void TakeDamage(float Amount);
-	
-	
+
+	UFUNCTION(BlueprintCallable)
+	float GetHealthPercent() const { return Health / MaxHealth; }
+
 
 protected:
 	float Health;
@@ -38,6 +43,4 @@ protected:
 private:
 	void Die();
 	bool IsDead = false;
-	
 };
-
