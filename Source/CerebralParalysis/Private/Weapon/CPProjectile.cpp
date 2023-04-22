@@ -17,6 +17,8 @@ ACPProjectile::ACPProjectile()
 	SetRootComponent(CollisionComponent);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponenent");
+
+	WeaponFXComponent = CreateDefaultSubobject<UCPWeaponFXComponent>("WeaponFXComponent");
 }
 
 void ACPProjectile::BeginPlay()
@@ -36,6 +38,8 @@ void ACPProjectile::OnProjectHit(UPrimitiveComponent* HitComponent, AActor* Othe
 		return;
 	
 	TakeDamage(OtherActor);
+	WeaponFXComponent->PlayImpactFX(Hit);
+
 	
 	Destroy();
 }

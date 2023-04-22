@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/CPWeaponFXComponent.h"
 #include "Weapon/CPBaseWeapon.h"
 #include "CPRifleWeapon.generated.h"
 
@@ -12,6 +13,7 @@
 UCLASS()
 class CEREBRALPARALYSIS_API ACPRifleWeapon : public ACPBaseWeapon
 {
+	ACPRifleWeapon();
 	GENERATED_BODY()
 
 protected:
@@ -21,6 +23,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float TraceMaxDistance = 1500;
 
+	UPROPERTY(VisibleAnywhere, Category = "VFX")
+	UCPWeaponFXComponent* WeaponFXComponent;
 	
 private:
 	virtual void TryFire() override;

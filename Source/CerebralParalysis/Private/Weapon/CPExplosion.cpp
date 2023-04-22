@@ -1,6 +1,5 @@
 // Cerebral Paralysis. All right reserved. 
 
-
 #include "Weapon/CPExplosion.h"
 
 #include "Components/Public/CPHealth.h"
@@ -12,6 +11,7 @@ ACPExplosion::ACPExplosion()
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>("Collision");
 	CollisionComponent->InitSphereRadius(5.0f);
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
 	SetRootComponent(CollisionComponent);
 }
 
@@ -19,8 +19,6 @@ void ACPExplosion::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorldTimerManager().SetTimer(TimerHandler, this, &ACPExplosion::StopExplosion, 1, false, ExplosionTime);
-
-	DrawDebugSphere(GetWorld(), GetActorLocation(), CollisionComponent->GetUnscaledSphereRadius(), 24, FColor::Red, false, GetLifeSpan());
 }
 
 void ACPExplosion::Tick(float DeltaSeconds)

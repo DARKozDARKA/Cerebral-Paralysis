@@ -5,6 +5,7 @@
 
 #include "Components/Public/CPHealth.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GeometryCollection/GeometryCollectionSimulationTypes.h"
 
 // Sets default values
 ACPBaseCharacter::ACPBaseCharacter()
@@ -106,7 +107,7 @@ void ACPBaseCharacter::MoveVertical(float Amount)
 void ACPBaseCharacter::OnDeath()
 {
 	IsDead = true;
-	PlayAnimMontage(DeathAnimationMontage);
+	//PlayAnimMontage(DeathAnimationMontage);
 
 	GetCharacterMovement()->DisableMovement();
 	SetLifeSpan(5.0);
@@ -115,6 +116,9 @@ void ACPBaseCharacter::OnDeath()
 	{
 		Controller->ChangeState(NAME_Spectating);
 	}
+	
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 

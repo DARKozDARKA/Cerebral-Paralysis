@@ -3,6 +3,12 @@
 #include "Weapon/CPRifleWeapon.h"
 #include "Components/Public/CPHealth.h"
 
+ACPRifleWeapon::ACPRifleWeapon()
+{
+	WeaponFXComponent = CreateDefaultSubobject<UCPWeaponFXComponent>("WeaponFXComponent");
+}
+
+
 void ACPRifleWeapon::TryFire()
 {
 	if (IsFiring && CanFire)
@@ -17,15 +23,15 @@ void ACPRifleWeapon::MakeShot()
 	FVector TraceStart;
 	FVector TraceEnd;
 	CalculateTrace(TraceStart, TraceEnd);
-
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, FireReloadTime, 0, 3.0f);
-
+	
 	FHitResult HitResult;
 	Raycast(TraceStart, TraceEnd, HitResult);
 
 	if (HitResult.bBlockingHit)
 		Damage(HitResult);
 
+	WeaponFXComponent->PlayImpactFX(HitResult);
+	
 	CanFire = false;
 	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ACPRifleWeapon::ReloadFire, FireReloadTime, false, FireReloadTime);
 }
@@ -56,8 +62,6 @@ void ACPRifleWeapon::Damage(FHitResult HitResult)
 		return;
 
 	Health->TakeDamage(DamageAmount);
-	
-	DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, FireReloadTime);
 }
 
 void ACPRifleWeapon::ReloadFire()

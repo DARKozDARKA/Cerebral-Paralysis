@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = "Explosion")
+	UCPWeaponFXComponent* WeaponFXComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile" )
 	float DamageRadius = 200.0f;
 
