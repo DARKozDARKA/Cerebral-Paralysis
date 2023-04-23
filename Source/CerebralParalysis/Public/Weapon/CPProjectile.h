@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Explosion")
 	UCPWeaponFXComponent* WeaponFXComponent;
 
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	TSubclassOf<AActor> TrailActor;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile" )
 	float DamageRadius = 200.0f;
 
@@ -42,6 +45,12 @@ protected:
 	
 private:	
 	FVector ShotDirection;
+
+	UPROPERTY()
+	AActor* CurrentTrailActor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float InLifespan = 5.0f;
 
 	UFUNCTION()
 	void OnProjectHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

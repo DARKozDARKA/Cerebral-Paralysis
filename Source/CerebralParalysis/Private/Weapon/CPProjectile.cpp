@@ -29,6 +29,11 @@ void ACPProjectile::BeginPlay()
 	ProjectileMovementComponent->Velocity = ShotDirection * ProjectileMovementComponent->InitialSpeed;
 	
 	CollisionComponent->OnComponentHit.AddDynamic(this, &ACPProjectile::OnProjectHit);
+
+	FActorSpawnParameters params;
+	CurrentTrailActor = GetWorld()->SpawnActor<AActor>(TrailActor, GetTransform().GetLocation(), FRotator::ZeroRotator, params);
+
+	CurrentTrailActor->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 }
 
 void ACPProjectile::OnProjectHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -40,7 +45,9 @@ void ACPProjectile::OnProjectHit(UPrimitiveComponent* HitComponent, AActor* Othe
 	TakeDamage(OtherActor);
 	WeaponFXComponent->PlayImpactFX(Hit);
 
-	
+	CurrentTrailActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	CurrentTrailActor->SetLifeSpan(InLifespan);
+
 	Destroy();
 }
 

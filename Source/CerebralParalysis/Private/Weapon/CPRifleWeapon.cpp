@@ -2,6 +2,7 @@
 
 #include "Weapon/CPRifleWeapon.h"
 #include "Components/Public/CPHealth.h"
+#include "NiagaraComponent.h"
 
 ACPRifleWeapon::ACPRifleWeapon()
 {
@@ -22,20 +23,26 @@ void ACPRifleWeapon::MakeShot()
 
 	FVector TraceStart;
 	FVector TraceEnd;
+
 	CalculateTrace(TraceStart, TraceEnd);
-	
+	FVector TraceFXEnd = TraceEnd;
+
 	FHitResult HitResult;
 	Raycast(TraceStart, TraceEnd, HitResult);
 
 	if (HitResult.bBlockingHit)
+	{
+		TraceFXEnd = HitResult.ImpactPoint;
 		Damage(HitResult);
-
-	WeaponFXComponent->PlayImpactFX(HitResult);
+	}
 	
+	WeaponFXComponent->PlayImpactFX(HitResult);
 	CanFire = false;
-	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ACPRifleWeapon::ReloadFire, FireReloadTime, false, FireReloadTime);
+	
+	SpawnTraceFX(TraceStart, TraceFXEnd);
+	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ACPRifleWeapon::ReloadFire, FireReloadTime, false,
+	                                FireReloadTime);
 }
-
 
 
 void ACPRifleWeapon::CalculateTrace(FVector& TraceStart, FVector& TraceEnd)
@@ -56,7 +63,7 @@ void ACPRifleWeapon::Raycast(FVector TraceStart, FVector TraceEnd, FHitResult& H
 
 void ACPRifleWeapon::Damage(FHitResult HitResult)
 {
-	UCPHealth* Health= Cast<UCPHealth>(HitResult.GetActor()->GetComponentByClass(UCPHealth::StaticClass()));
+	UCPHealth* Health = Cast<UCPHealth>(HitResult.GetActor()->GetComponentByClass(UCPHealth::StaticClass()));
 
 	if (!Health)
 		return;
@@ -67,4 +74,15 @@ void ACPRifleWeapon::Damage(FHitResult HitResult)
 void ACPRifleWeapon::ReloadFire()
 {
 	CanFire = true;
+}
+
+void ACPRifleWeapon::SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd)
+{
+	UNiagaraComponent* TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+		GetWorld(), TraceFX, TraceStart);
+	
+	if (!TraceFXComponent)
+		return;
+	
+	TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
 }

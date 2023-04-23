@@ -34,9 +34,16 @@ private:
 	void Raycast(FVector TraceStart, FVector TraceEnd, FHitResult& HitResult);
 	void Damage(FHitResult HitResult);
 	void ReloadFire();
+	void SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd);
 
 	UPROPERTY(EditDefaultsOnly)
 	double BulletSpread;
+
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* TraceFX;
+
+	UPROPERTY(EditDefaultsOnly)
+	FString TraceTargetName = "TraceTarget";
 
 	FTimerHandle FireTimerHandle;
 };
