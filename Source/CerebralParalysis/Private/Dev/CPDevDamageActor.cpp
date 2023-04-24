@@ -37,7 +37,7 @@ void ACPDevDamageActor::Tick(float DeltaTime)
 		if (HealthActor == nullptr)
 			return;
 
-		Cast<UCPHealth>(HealthActor)->TakeDamage(0.1f);
+		Cast<UCPHealth>(HealthActor)->TakeDamage(0.1f, 100);
 	}
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 24, SphereColor);

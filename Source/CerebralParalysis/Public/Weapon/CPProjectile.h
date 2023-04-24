@@ -17,6 +17,8 @@ class CEREBRALPARALYSIS_API ACPProjectile : public AActor
 public:	
 	ACPProjectile();
 	void SetShootDirection(const FVector& Vector){ShotDirection = Vector;}
+	
+	void SetTeam(int MyTeam){Team = MyTeam;}
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
@@ -52,6 +54,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float InLifespan = 5.0f;
 
+	int Team;
+	
 	UFUNCTION()
 	void OnProjectHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 

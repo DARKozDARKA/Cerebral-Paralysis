@@ -2,6 +2,8 @@
 
 
 #include "Weapon/CPLauncherWeapon.h"
+
+#include "Components/Public/CPHealth.h"
 #include "Kismet/GameplayStatics.h"
 
 void ACPLauncherWeapon::StartFire()
@@ -26,6 +28,17 @@ void ACPLauncherWeapon::MakeShot()
 	
 	Projectile->SetShootDirection(Direction);
 	Projectile->SetOwner(GetOwner());
+
+	if (UActorComponent* Health = GetOwner()->GetComponentByClass(UCPHealth::StaticClass()))
+	{
+		if (const UCPHealth* HealthComponent = Cast<UCPHealth>(Health))
+		{
+			UE_LOG(LogTemp, Display, TEXT("GOT HEALTH"));
+			Projectile->SetTeam(HealthComponent->Team);
+		}
+			
+	}
+	
 	Projectile->FinishSpawning(SpawnTransform);
 }
 

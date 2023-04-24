@@ -68,7 +68,18 @@ void ACPRifleWeapon::Damage(FHitResult HitResult)
 	if (!Health)
 		return;
 
-	Health->TakeDamage(DamageAmount);
+	int MyTeam;
+	if (UActorComponent* MyHealth = GetOwner()->GetComponentByClass(UCPHealth::StaticClass()))
+	{
+		if (const UCPHealth* HealthComponent = Cast<UCPHealth>(MyHealth))
+		{
+			UE_LOG(LogTemp, Display, TEXT("GOT HEALTH RIFLE"));
+			MyTeam = HealthComponent->Team; 
+		}
+			
+	}
+	
+	Health->TakeDamage(DamageAmount, MyTeam);
 }
 
 void ACPRifleWeapon::ReloadFire()

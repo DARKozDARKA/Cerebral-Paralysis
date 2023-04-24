@@ -21,9 +21,12 @@ void UCPHealth::BeginPlay()
 	
 }
 
-void UCPHealth::TakeDamage(float Amount)
+void UCPHealth::TakeDamage(float Amount, int EnemyTeam)
 {
 	if (IsDead)
+		return;
+
+	if (EnemyTeam == Team)
 		return;
 	
 	Health -= Amount;

@@ -23,6 +23,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0"))
 	float MaxHealth;
 
+	UPROPERTY(EditDefaultsOnly)
+	int Team;
+	
 	UFUNCTION(BlueprintCallable)
 	float GetHealth() const { return Health; }
 
@@ -30,7 +33,7 @@ public:
 	bool IsPlayerDead() const { return Health <= 0; }
 
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage(float Amount);
+	void TakeDamage(float Amount, int EnemyTeam);
 
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercent() const { return Health / MaxHealth; }

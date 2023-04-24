@@ -41,6 +41,16 @@ void ACPProjectile::OnProjectHit(UPrimitiveComponent* HitComponent, AActor* Othe
 {
 	if (!GetWorld())
 		return;
+
+	
+	UCPHealth* Health = Cast<UCPHealth>(Hit.GetActor()->GetComponentByClass(UCPHealth::StaticClass()));
+
+	if (Health)
+	{
+		if (Health->Team == Team)
+			return;
+	}
+		
 	
 	TakeDamage(OtherActor);
 	WeaponFXComponent->PlayImpactFX(Hit);
@@ -58,7 +68,7 @@ void ACPProjectile::TakeDamage(AActor* OtherActor)
 	if (!Explosion)
 		return;
 	
-	Explosion->SetDamage(DamageAmount);
+	Explosion->SetDamage(DamageAmount, Team);
 	Explosion->SetOwner(GetOwner());
 	Explosion->FinishSpawning(GetActorTransform());
 

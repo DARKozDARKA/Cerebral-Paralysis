@@ -38,7 +38,7 @@ void ACPExplosion::Tick(float DeltaSeconds)
 		if (HealthActor == nullptr)
 			continue;;
 
-		Cast<UCPHealth>(HealthActor)->TakeDamage(Damage);
+		Cast<UCPHealth>(HealthActor)->TakeDamage(Damage, Team);
 		IsDamaged = true;
 	}
 }

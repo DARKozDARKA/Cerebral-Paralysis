@@ -11,7 +11,8 @@
 			"AdditionalDependencies": [
 				"Engine",
 				"UMG",
-				"Niagara"
+				"Niagara",
+				"AIModule"
 			]
 		}
 	],
@@ -20,8 +21,7 @@
 			"Name": "ModelingToolsEditorMode",
 			"Enabled": true,
 			"TargetAllowList": [
-				"Editor",
-				"Niagara"
+				"Editor"
 			]
 		}
 	]
