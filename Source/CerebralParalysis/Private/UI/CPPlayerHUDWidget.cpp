@@ -5,10 +5,20 @@
 
 #include "Components/Public/CPHealth.h"
 
+
+bool UCPPlayerHUDWidget::Initialize()
+{
+	HealthComponent = GetHealthComponent();
+
+	if (HealthComponent)
+		HealthComponent->HealthChangedDelegate.AddUObject(this, &UCPPlayerHUDWidget::OnHealthChanged);
+	
+	return Super::Initialize();
+}
+
+
 float UCPPlayerHUDWidget::GetHealthPercentage() const
 {
-	const auto HealthComponent = GetHealthComponent();
-	
 	if (!HealthComponent)
 		return 0.0f;
 
@@ -27,10 +37,10 @@ UCPHealth* UCPPlayerHUDWidget::GetHealthComponent() const
 	if (!ActorComponent)
 		return nullptr;
 	
-	const auto Component = ActorComponent;
-	const auto HealthComponent = Cast<UCPHealth>(Component);
-	return HealthComponent;
+	
+	return Cast<UCPHealth>(ActorComponent);
 }
+
 
 bool UCPPlayerHUDWidget::IsPlayerAlive() const
 {
@@ -43,3 +53,8 @@ bool UCPPlayerHUDWidget::IsPlayerSpectating() const
 	return Controller && Controller->GetStateName() == NAME_Spectating;
 }
 
+void UCPPlayerHUDWidget::OnHealthChanged()
+{
+	UE_LOG(LogTemp, Display, TEXT("AAAAAAAAAAAAAA"));
+	OnTakeDamage();
+}

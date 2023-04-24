@@ -25,6 +25,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsPlayerSpectating() const;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void OnTakeDamage();
+
+	void OnHealthChanged();
+	virtual bool Initialize() override;
+	
 private:
 	UCPHealth* GetHealthComponent() const;
+
+
+protected:
+	UPROPERTY()
+	UCPHealth* HealthComponent;
 };

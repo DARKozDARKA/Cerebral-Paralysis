@@ -9,7 +9,7 @@
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CEREBRALPARALYSIS_API UCPHealth : public UActorComponent
 {
-	DECLARE_DELEGATE(FOnHealthChanged);
+	DECLARE_MULTICAST_DELEGATE(FOnHealthChanged);
 	DECLARE_MULTICAST_DELEGATE(FOnDeath);
 
 	GENERATED_BODY()

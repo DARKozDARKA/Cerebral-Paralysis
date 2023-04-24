@@ -31,7 +31,7 @@ void UCPHealth::TakeDamage(float Amount)
 	if (Health <= 0)
 		Die();
 
-	HealthChangedDelegate.Execute();
+	HealthChangedDelegate.Broadcast();
 }
 
 void UCPHealth::Die()

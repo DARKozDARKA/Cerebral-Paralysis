@@ -31,7 +31,7 @@ void ACPBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	HealthComponent->HealthChangedDelegate.BindUObject(this, &ACPBaseCharacter::SetHealth);
+	HealthComponent->HealthChangedDelegate.AddUObject(this, &ACPBaseCharacter::SetHealth);
 	HealthComponent->OnDeath.AddUObject(this, &ACPBaseCharacter::OnDeath);
 	SetHealth();
 }
