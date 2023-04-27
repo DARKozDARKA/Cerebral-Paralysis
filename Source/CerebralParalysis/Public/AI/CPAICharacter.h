@@ -15,4 +15,5 @@ class CEREBRALPARALYSIS_API ACPAICharacter : public ACPBaseCharacter
 	GENERATED_BODY()
 public:
 	ACPAICharacter(const FObjectInitializer& ObjInit);
+	
 };

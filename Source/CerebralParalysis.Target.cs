@@ -10,6 +10,7 @@ public class CerebralParalysisTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
-		ExtraModuleNames.AddRange( new string[] { "CerebralParalysis" } );
+		ExtraModuleNames.AddRange(
+			new string[] { "CerebralParalysis" });
 	}
 }

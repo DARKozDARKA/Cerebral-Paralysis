@@ -14,7 +14,9 @@ public class CerebralParalysis : ModuleRules
 			"CoreUObject", 
 			"Engine",
 			"InputCore",
-			"Niagara"
+			"Niagara",
+			"GameplayTasks",
+			"NavigationSystem"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

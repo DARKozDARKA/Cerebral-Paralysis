@@ -13,5 +13,8 @@ UCLASS()
 class CEREBRALPARALYSIS_API ACPAIController : public AAIController
 {
 	GENERATED_BODY()
+
+public:
+	
 	
 };
