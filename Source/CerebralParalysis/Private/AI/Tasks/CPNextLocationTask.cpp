@@ -2,7 +2,6 @@
 
 
 #include "AI/Tasks/CPNextLocationTask.h"
-
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -41,8 +40,8 @@ EBTNodeResult::Type UCPNextLocationTask::ExecuteTask(UBehaviorTreeComponent& Own
 		
 		Location = CenterActor->GetActorLocation();
 	}
-	
-	const auto IsFound = NavSys->GetRandomReachablePointInRadius(Location, Radius, NavLocation);
+
+	const bool IsFound = NavSys->GetRandomReachablePointInRadius(Location, Radius, NavLocation);
 
 	if (!IsFound)
 		return EBTNodeResult::Failed;
